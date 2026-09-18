@@ -35,6 +35,12 @@ UNLOCK_PRICE = 9.9
 app = Flask(__name__)
 
 
+@app.errorhandler(Exception)
+def handle_exception(e):
+    """把未捕获异常转成 JSON，便于云端排查（默认 500 是 HTML 页看不到原因）。"""
+    return jsonify(error=f"{type(e).__name__}: {str(e)[:300]}"), 500
+
+
 # ---------------------------------------------------------------------------
 # 几何计算与坐姿分类（纯 numpy/math，便于单独自测）
 # ---------------------------------------------------------------------------
@@ -257,17 +263,20 @@ _detector = None
 def get_detector():
     global _detector
     if _detector is None:
-        if not MODEL_FILE.exists():
-            raise FileNotFoundError(
-                f"缺少 {MODEL_FILE.name}，请下载 pose_landmarker_lite.task 放到本目录")
-        # 用字节流加载模型，绕过 C++ 层对中文/括号路径的处理问题
-        options = vision.PoseLandmarkerOptions(
-            base_options=mp_python.BaseOptions(model_asset_buffer=MODEL_FILE.read_bytes()),
-            running_mode=vision.RunningMode.IMAGE,
-            num_poses=1,
-            min_pose_detection_confidence=0.5,
-        )
-        _detector = vision.PoseLandmarker.create_from_options(options)
+        try:
+            if not MODEL_FILE.exists():
+                raise FileNotFoundError(
+                    f"缺少 {MODEL_FILE.name}，请下载 pose_landmarker_lite.task 放到本目录")
+            # 用字节流加载模型，绕过 C++ 层对中文/括号路径的处理问题
+            options = vision.PoseLandmarkerOptions(
+                base_options=mp_python.BaseOptions(model_asset_buffer=MODEL_FILE.read_bytes()),
+                running_mode=vision.RunningMode.IMAGE,
+                num_poses=1,
+                min_pose_detection_confidence=0.5,
+            )
+            _detector = vision.PoseLandmarker.create_from_options(options)
+        except Exception as exc:  # noqa: BLE001
+            raise RuntimeError(f"模型加载失败: {type(exc).__name__}: {exc}") from exc
     return _detector
 
 
