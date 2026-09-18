@@ -1,7 +1,7 @@
 App({
   globalData: {
     latestResult: null,
-    aiServiceUrl: 'http://127.0.0.1:5000',
+    aiServiceUrl: 'https://seatcare-315941-6-1435679288.sh.run.tcloudbase.com',
     openid: '',
     nickname: '',
     member: false
