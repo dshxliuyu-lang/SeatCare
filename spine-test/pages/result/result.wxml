@@ -1,0 +1,54 @@
+<view class="page">
+  <view class="report {{tone}}">
+    <text class="label">你的测评结果{{profileText ? ' · 为你定制' : ''}}</text>
+    <view class="row"><text class="level">{{level}}</text><text>{{score}} / 20 分</text></view>
+    <text wx:if="{{profileText}}" class="profile-tag">{{profileText}}</text>
+    <text class="summary">{{summary}}</text>
+    <text wx:if="{{profileNote}}" class="profile-note">{{profileNote}}</text>
+  </view>
+
+  <view wx:if="{{posture}}" class="card posture-card">
+    <view class="title">坐姿检测结果</view>
+    <view class="row">
+      <text class="posture-type">{{posture.type}}</text>
+      <text class="lv lv-{{posture.level}}">{{posture.levelText}}</text>
+    </view>
+    <text wx:if="{{posture.angle}}" class="posture-angle">头前伸 {{posture.angle}}</text>
+    <text wx:if="{{combined}}" class="combined">{{combined}}</text>
+  </view>
+
+  <view class="card dims-card">
+    <view class="title">分维度解读</view>
+    <view wx:for="{{dims}}" wx:key="name" class="dim">
+      <view class="dim-head">
+        <text class="dim-name">{{item.name}}</text>
+        <text class="dim-score">{{item.score}} / {{item.max}}</text>
+      </view>
+      <view class="dim-bar"><view class="dim-fill dim-{{item.tone}}" style="width:{{item.pct}}%"></view></view>
+      <text class="dim-advice">{{item.advice}}</text>
+    </view>
+  </view>
+
+  <view class="card redflag-card">
+    <view class="redflag-title">危险信号自查</view>
+    <text class="redflag-sub">以下任一情况出现，请尽快到正规医院就诊，不要仅依赖自测：</text>
+    <view wx:for="{{redFlags}}" wx:key="text" class="redflag-item" data-index="{{index}}" bindtap="toggleFlag">
+      <view class="check {{item.on ? 'on' : ''}}"><text wx:if="{{item.on}}">✓</text></view>
+      <text>{{item.text}}</text>
+    </view>
+    <view wx:if="{{anyFlag}}" class="redflag-alert">你勾选了危险信号，建议尽快就医进一步评估。</view>
+  </view>
+
+  <view class="card advice">
+    <view class="title">给你的居家建议</view>
+    <view wx:for="{{tips}}" wx:key="index" class="item"><text class="num">{{index+1}}</text><text>{{item}}</text></view>
+  </view>
+
+  <view class="warning">
+    <text class="warning-title">这不是医学诊断</text>
+    <text>本工具为非医疗器械，结果不能确认或排除任何疾病，也不能用于治疗或疾病监测。如有持续疼痛、活动受限、麻木无力、大小便异常或其他不适，请及时到正规医疗机构就诊。</text>
+  </view>
+
+  <button class="primary" bindtap="knowledge">查看姿势与拉伸建议</button>
+  <button class="secondary again" bindtap="again">重新测评</button>
+</view>

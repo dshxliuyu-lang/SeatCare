@@ -1,0 +1,7 @@
+.login-page{display:flex;flex-direction:column;padding-top:120rpx}
+.login-hero{display:flex;flex-direction:column;align-items:center;margin-bottom:90rpx}
+.login-logo{width:120rpx;height:120rpx;line-height:120rpx;text-align:center;color:#fff;background:#176b4d;border-radius:32rpx;font-size:60rpx;font-weight:800;box-shadow:0 16rpx 32rpx rgba(23,107,77,.22)}
+.login-title{margin-top:28rpx;font-size:40rpx;font-weight:800}
+.login-sub{margin-top:12rpx;color:#68756e;font-size:26rpx;text-align:center;line-height:1.6;max-width:520rpx}
+.login-btn{height:92rpx;width:100%;margin:0;display:flex;align-items:center;justify-content:center;font-size:32rpx}
+.login-tip{margin-top:40rpx;padding:24rpx;color:#89938e;font-size:23rpx;line-height:1.6;text-align:center}

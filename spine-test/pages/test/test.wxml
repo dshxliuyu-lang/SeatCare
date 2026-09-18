@@ -1,0 +1,43 @@
+<view class="page">
+  <view wx:if="{{stage === 'profile'}}" class="card profile-card">
+    <text class="profile-title">先告诉我们一些基本信息</text>
+    <text class="profile-sub">不同人群的评估侧重点不同，用于生成更适合你的建议</text>
+    <view class="pf-group">
+      <text class="pf-label">年龄段</text>
+      <view class="pf-options">
+        <view wx:for="{{ages}}" wx:key="*this" class="pf-opt {{profile.age===item?'on':''}}" data-v="{{item}}" bindtap="setAge">{{item}}</view>
+      </view>
+    </view>
+    <view class="pf-group">
+      <text class="pf-label">性别</text>
+      <view class="pf-options">
+        <view wx:for="{{genders}}" wx:key="*this" class="pf-opt {{profile.gender===item?'on':''}}" data-v="{{item}}" bindtap="setGender">{{item}}</view>
+      </view>
+    </view>
+    <view class="pf-group">
+      <text class="pf-label">主要场景</text>
+      <view class="pf-options">
+        <view wx:for="{{roles}}" wx:key="*this" class="pf-opt {{profile.role===item?'on':''}}" data-v="{{item}}" bindtap="setRole">{{item}}</view>
+      </view>
+    </view>
+    <button class="primary" bindtap="startQuiz">开始答题</button>
+  </view>
+
+  <block wx:else>
+    <view class="progress-head"><text>测评进度</text><text>{{current+1}} / {{questions.length}}</text></view>
+    <view class="progress"><view class="bar" style="width:{{(current+1)/questions.length*100}}%"></view></view>
+    <view class="card">
+      <text class="qno">问题 {{current+1}} · {{questions[current].dim}}</text>
+      <view class="qtitle">{{questions[current].title}}</view>
+      <view wx:for="{{questions[current].options}}" wx:key="index" class="option {{selected===index?'selected':''}}" data-value="{{index}}" bindtap="choose">
+        <view class="radio"><view wx:if="{{selected===index}}" class="dot"></view></view>
+        <text>{{item}}</text>
+      </view>
+    </view>
+    <view class="actions">
+      <button wx:if="{{current>0}}" class="secondary action" bindtap="prev">上一题</button>
+      <button class="primary action" bindtap="next">{{current===questions.length-1?'查看结果':'下一题'}}</button>
+    </view>
+    <text class="privacy">答题记录仅保存在你的设备本地</text>
+  </block>
+</view>

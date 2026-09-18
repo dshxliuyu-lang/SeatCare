@@ -1,0 +1,37 @@
+<view class="page">
+  <view class="user-card card">
+    <view class="avatar">{{loggedIn ? '脊' : '登'}}</view>
+    <view class="user-info">
+      <view class="user-name-row">
+        <text class="user-name">{{loggedIn ? nickname : '未登录'}}</text>
+        <text wx:if="{{loggedIn && member}}" class="member-badge">终身会员</text>
+      </view>
+      <text class="user-sub">{{loggedIn ? (member ? '终身会员 · 全部报告免费解锁' : 'ID ' + openidShort + ' · 普通用户') : '登录后保存坐姿记录与历史趋势'}}</text>
+    </view>
+    <text wx:if="{{!loggedIn}}" class="go-login" bindtap="goLogin">去登录 ›</text>
+  </view>
+
+  <view class="section-title">会员权益</view>
+  <view class="card member-card">
+    <view class="member-row"><text class="member-dot">✓</text><text>AI 坐姿完整报告：高清检测图、多项指标与详细建议</text></view>
+    <view class="member-row"><text class="member-dot">✓</text><text>一次付费，终身免费，之后所有报告自动解锁</text></view>
+    <view class="member-row"><text class="member-dot">✓</text><text>坐姿历史记录保存与前后对比</text></view>
+    <text wx:if="{{loggedIn && !member}}" class="member-tip">尚未开通 · 在首页完成一次坐姿分析后即可开通</text>
+  </view>
+
+  <view class="menu card">
+    <view class="menu-item" bindtap="goHistory">
+      <text>坐姿历史记录</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goLogin" wx:if="{{loggedIn}}">
+      <text>重新登录</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="disclaimer">
+    <text class="disclaimer-title">重要说明</text>
+    <text>本工具为非医疗器械，仅用于健康科普与风险自测，不能替代医院检查、医学诊断、治疗或疾病监测。坐姿与压力分析基于经验阈值，结果仅供参考。</text>
+  </view>
+</view>

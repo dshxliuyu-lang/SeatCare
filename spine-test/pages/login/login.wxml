@@ -1,0 +1,13 @@
+<view class="page login-page">
+  <view class="login-hero">
+    <view class="login-logo">脊</view>
+    <view class="login-title">脊椎健康自测</view>
+    <view class="login-sub">登录后可保存坐姿记录，查看历史趋势与前后对比</view>
+  </view>
+
+  <button class="primary login-btn" bindtap="login" loading="{{busy}}" disabled="{{busy}}">微信一键登录</button>
+
+  <view class="login-tip">
+    <text>登录仅用于在你的账号下保存自测与坐姿记录。本工具非医疗器械，不用于疾病诊断、治疗或监测。</text>
+  </view>
+</view>

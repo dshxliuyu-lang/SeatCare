@@ -1,0 +1,172 @@
+<view class="page home-page">
+  <view class="hero">
+    <view class="hero-top">
+      <view class="logo">脊</view>
+      <text class="eyebrow">约 2 分钟 · 10 道题</text>
+    </view>
+    <view class="hero-title">从日常感受，了解脊椎健康风险</view>
+    <text class="desc">通过姿态与身体感受完成初步风险自测，帮助你更有意识地关注脊椎健康。</text>
+    <button class="primary hero-button" bindtap="start">开始测评</button>
+  </view>
+
+  <view class="quick-row">
+    <view wx:if="{{loggedIn}}" class="quick-user" bindtap="goProfile"><text>已登录 · 查看我的</text></view>
+    <view wx:else class="quick-user" bindtap="goLogin"><text>登录以保存记录</text></view>
+    <view class="quick-history" bindtap="goHistory">坐姿历史 ›</view>
+  </view>
+
+  <view class="notice">
+    <text class="bang">!</text>
+    <view class="notice-content">
+      <text class="notice-title">重要说明</text>
+      <text class="notice-text">本工具为非医疗器械，仅用于健康科普与风险自测，不能替代医院检查、医学诊断、治疗或疾病监测。</text>
+    </view>
+  </view>
+
+  <view class="reminder-card">
+    <view class="reminder-left">
+      <view class="reminder-icon">钟</view>
+      <view class="reminder-body">
+        <text class="reminder-title">久坐提醒</text>
+        <picker mode="multiSelector" range="{{reminderRange}}" value="{{reminderValue}}" bindchange="onReminderDuration">
+          <view class="reminder-sub">{{reminder.running ? '正在计时 · ' + reminder.remainText : '每 ' + (reminder.hour > 0 ? reminder.hour + ' 小时 ' + reminder.minute + ' 分钟' : reminder.minute + ' 分钟') + '提醒 · 点此设置'}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="reminder-btn {{reminder.running ? 'stop' : ''}}" bindtap="toggleReminder">{{reminder.running ? '停止' : '开始'}}</view>
+  </view>
+
+  <view class="detector-section">
+    <view class="section-heading">
+      <view>
+        <text class="section-kicker">AI POSTURE MONITOR</text>
+        <text class="title detector-heading">智能坐姿检测系统</text>
+      </view>
+      <view class="tech-tag">MediaPipe Pose</view>
+    </view>
+
+    <view class="monitor-shell {{demo.level}}">
+      <view class="monitor-bar">
+        <view class="monitor-brand">
+          <view class="brand-mark"><view class="brand-dot"></view></view>
+          <view>
+            <text class="monitor-title">坐姿健康监测</text>
+            <text class="monitor-subtitle">姿态关键点分析</text>
+          </view>
+        </view>
+        <view class="online-pill">
+          <view class="online-dot"></view>
+          <text>{{demo.running ? '分析中' : (sourceImage ? '已生成' : '待机')}}</text>
+        </view>
+      </view>
+
+      <view class="screen-grid">
+        <view class="screen-card">
+          <view class="screen-title-row">
+            <text class="screen-title">原始画面</text>
+            <text class="screen-meta">CAM 01</text>
+          </view>
+          <view class="video-stage live-stage">
+            <image wx:if="{{sourceImage}}" class="posture-photo" src="{{analyzedImage || blurredImage || sourceImage}}" mode="aspectFill"></image>
+            <view wx:else class="empty-stage" bindtap="goShoot">
+              <text class="empty-icon">+</text>
+              <text>拍摄或选择本人坐姿照</text>
+            </view>
+            <view class="scan-grid"></view>
+            <view class="corner corner-tl"></view>
+            <view class="corner corner-tr"></view>
+            <view class="corner corner-bl"></view>
+            <view class="corner corner-br"></view>
+            <view wx:if="{{sourceImage}}" class="angle-chip">{{demo.angle}}</view>
+            <view wx:if="{{demo.locked}}" class="lock-overlay">
+              <text class="lock-icon">🔒</text>
+              <text class="lock-text">开通终身会员 · 解锁全部报告</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="screen-card">
+          <view class="screen-title-row">
+            <text class="screen-title">AI 标准坐姿</text>
+            <text class="screen-meta reference-meta">个性化</text>
+          </view>
+          <view class="video-stage reference-stage">
+            <image wx:if="{{standardImage}}" class="posture-photo" src="{{standardImage}}" mode="aspectFill"></image>
+            <view wx:else class="empty-stage muted">
+              <text>{{demo.locked ? '🔒 解锁后查看' : (sourceImage ? '等待 AI 分析' : '等待本人坐姿照')}}</text>
+            </view>
+            <view wx:if="{{standardImage}}" class="ai-badge">AI</view>
+            <view wx:if="{{standardImage}}" class="reference-labels">
+              <text>依据本人骨段比例生成</text>
+              <text>头正 · 肩平 · 躯干直立</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="status-panel">
+        <view class="status-main">
+          <view class="status-indicator"></view>
+          <view class="status-copy">
+            <text class="status-label">当前状态 · {{demo.type}}</text>
+            <text class="status-value">{{demo.status}}</text>
+          </view>
+        </view>
+        <view class="angle-box">
+          <text class="angle-value">{{demo.angle}}</text>
+          <text class="angle-label">头前伸</text>
+        </view>
+      </view>
+
+      <view wx:if="{{!demo.locked}}" class="metric-strip">
+        <view class="metric-chip"><text class="mc-v">{{demo.shoulder}}</text><text class="mc-k">高低肩</text></view>
+        <view class="metric-chip"><text class="mc-v">{{demo.head}}</text><text class="mc-k">头侧倾</text></view>
+      </view>
+
+      <view class="advice-box">
+        <view class="advice-icon">i</view>
+        <view class="advice-copy">
+          <text class="advice-title">健康建议</text>
+          <text class="advice-text">{{demo.advice}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{video}}" class="video-ref" bindtap="copyVideoLink">
+        <view class="video-icon">▶</view>
+        <view class="video-copy">
+          <text class="video-title">矫正参考 · {{video.title}}</text>
+          <text class="video-author">作者：{{video.author}} · 点击复制链接</text>
+        </view>
+      </view>
+
+      <view wx:if="{{demo.locked}}" class="unlock-bar">
+        <button class="unlock-button" bindtap="unlock">🔓 一次付费 · 终身解锁 ¥{{demo.price}}</button>
+        <button class="unlock-again" bindtap="goShoot">重新拍摄</button>
+      </view>
+      <view wx:else class="monitor-actions">
+        <button class="monitor-button start-button" bindtap="goShoot">
+          <text class="button-symbol">＋</text><text>{{sourceImage ? '更换照片' : '拍摄坐姿'}}</text>
+        </button>
+        <button class="monitor-button stop-button" bindtap="startDemo" disabled="{{!sourceImage || demo.running}}">
+          <text class="button-symbol">▶</text><text>AI 分析</text>
+        </button>
+      </view>
+      <text class="demo-note">结果基于经验阈值，仅供参考，非医学诊断 · 校正预览沿用本人照片，不使用固定标准图</text>
+    </view>
+  </view>
+
+  <view class="head">
+    <text class="title">今日健康小知识</text>
+    <view class="head-right">
+      <text class="daily-tag">每日更新</text>
+      <text class="more" bindtap="knowledge">查看全部 ›</text>
+    </view>
+  </view>
+  <view class="tips">
+    <view wx:for="{{tips}}" wx:key="title" class="tip">
+      <text class="icon {{item.color === 'orange' ? 'orange' : ''}}">{{item.icon}}</text>
+      <text class="tip-title">{{item.title}}</text>
+      <text class="small">{{item.content}}</text>
+    </view>
+  </view>
+</view>

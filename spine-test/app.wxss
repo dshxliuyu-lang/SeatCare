@@ -1,0 +1,14 @@
+page{background:#f5faf7;color:#17231e;font-size:30rpx}
+.page{min-height:100vh;padding:32rpx;box-sizing:border-box}
+button{text-align:center}
+.card{background:#fff;border:1rpx solid #e2ebe6;border-radius:20rpx;padding:32rpx}
+.primary{background:#176b4d!important;color:#fff!important;border-radius:14rpx;font-weight:700}
+.primary::after,.secondary::after{border:0}
+.secondary{background:#e7f2ec!important;color:#176b4d!important;border-radius:14rpx;font-weight:700}
+.row{display:flex;align-items:center;justify-content:space-between}
+.muted{color:#89938e;font-size:25rpx}
+.link{color:#176b4d}
+.lv{display:inline-block;padding:6rpx 16rpx;border-radius:999rpx;font-size:22rpx;font-weight:700}
+.lv-ideal,.lv-good{color:#0f6b48;background:#e2f1e9}
+.lv-warning{color:#b07613;background:#fff3d6}
+.lv-danger{color:#c0392b;background:#ffe9e6}

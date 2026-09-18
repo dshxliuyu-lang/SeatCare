@@ -1,0 +1,90 @@
+<view class="page history-page">
+  <view class="history-head">
+    <text class="history-count">共 {{records.length}} 条记录</text>
+    <view class="compare-toggle {{compareMode ? 'on' : ''}}" bindtap="toggleCompare">对比模式</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="empty"><text>加载中…</text></view>
+
+  <view wx:elif="{{empty}}" class="empty">
+    <text class="empty-icon">坐</text>
+    <text class="empty-title">还没有坐姿记录</text>
+    <text class="empty-sub">去首页拍摄坐姿照并完成 AI 分析，记录会自动保存</text>
+    <button class="primary empty-btn" bindtap="goHome">去检测坐姿</button>
+  </view>
+
+  <view wx:else class="record-list">
+    <view wx:for="{{records}}" wx:key="id" class="record {{compareMode && selected.indexOf(item.id) >= 0 ? 'picked' : ''}}" data-id="{{item.id}}" bindtap="openDetail">
+      <image wx:if="{{item.thumbSrc}}" class="record-thumb" src="{{item.thumbSrc}}" mode="aspectFill"></image>
+      <view wx:else class="record-thumb record-thumb-empty">脊</view>
+      <view class="record-body">
+        <view class="row">
+          <text class="record-type">{{item.postureType}}</text>
+          <text class="lv lv-{{item.level}}">{{item.levelText}}</text>
+        </view>
+        <text class="record-date">{{item.date}}</text>
+        <text class="record-angle">头前伸 {{item.angle}}°</text>
+      </view>
+      <view wx:if="{{compareMode}}" class="pick-box">
+        <view wx:if="{{selected.indexOf(item.id) >= 0}}" class="pick-dot">✓</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{compareMode && records.length}}" class="compare-bar">
+    <button class="primary compare-btn" bindtap="doCompare" disabled="{{selected.length !== 2}}">开始对比 ({{selected.length}}/2)</button>
+  </view>
+
+  <view wx:if="{{detail}}" class="overlay" bindtap="closePanel">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">{{detail.postureType}} · {{detail.date}}</text>
+        <text class="sheet-close" bindtap="closePanel">×</text>
+      </view>
+      <image wx:if="{{detail.imageSrc}}" class="sheet-img" src="{{detail.imageSrc}}" mode="widthFix"></image>
+      <view wx:if="{{detail.originalSrc || detail.standardSrc}}" class="photo-compare">
+        <view wx:if="{{detail.originalSrc}}" class="pc-col">
+          <text class="pc-label">原始照片</text>
+          <image class="pc-img" src="{{detail.originalSrc}}" mode="widthFix"></image>
+        </view>
+        <view wx:if="{{detail.standardSrc}}" class="pc-col">
+          <text class="pc-label">标准坐姿</text>
+          <image class="pc-img" src="{{detail.standardSrc}}" mode="widthFix"></image>
+        </view>
+      </view>
+      <view class="metric-list">
+        <view class="metric-row"><text>头前伸</text><text>{{detail.angle}}°</text></view>
+        <view class="metric-row"><text>高低肩</text><text>{{detail.shoulderTilt}}°</text></view>
+        <view class="metric-row"><text>头侧倾</text><text>{{detail.headTilt}}°</text></view>
+        <view class="metric-row"><text>躯干侧偏比</text><text>{{detail.lateralLean}}</text></view>
+      </view>
+      <view class="sheet-advice">{{detail.advice}}</view>
+      <button class="secondary sheet-del" data-id="{{detail.id}}" bindtap="remove">删除这条记录</button>
+    </view>
+  </view>
+
+  <view wx:if="{{compare}}" class="overlay" bindtap="closePanel">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">前后对比</text>
+        <text class="sheet-close" bindtap="closePanel">×</text>
+      </view>
+      <view class="compare-grid">
+        <view class="compare-col">
+          <text class="compare-label">之前 · {{compare.left.date}}</text>
+          <image wx:if="{{compare.left.imageSrc}}" class="compare-img" src="{{compare.left.imageSrc}}" mode="widthFix"></image>
+          <text class="compare-meta">头前伸 {{compare.left.angle}}°</text>
+        </view>
+        <view class="compare-col">
+          <text class="compare-label">之后 · {{compare.right.date}}</text>
+          <image wx:if="{{compare.right.imageSrc}}" class="compare-img" src="{{compare.right.imageSrc}}" mode="widthFix"></image>
+          <text class="compare-meta">头前伸 {{compare.right.angle}}°</text>
+        </view>
+      </view>
+      <view class="verdict">
+        <text class="verdict-title">对比结论</text>
+        <text>{{compare.verdict}}（变化 {{compare.delta > 0 ? '+' : ''}}{{compare.delta}}°）</text>
+      </view>
+    </view>
+  </view>
+</view>

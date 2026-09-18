@@ -1,0 +1,28 @@
+<view class="shoot-page">
+  <view class="shoot-header">
+    <text class="step-title">{{step === 1 ? '第 1 步 · 拍正面照' : '第 2 步 · 拍侧面照'}}</text>
+    <text class="step-sub">{{step === 1 ? '正对镜头，露头肩髋 · 测高低肩 / 头侧倾 / 侧偏' : '侧身 90° 正对镜头 · 测头前伸 / 驼背'}}</text>
+  </view>
+
+  <view class="guide-area">
+    <view class="silhouette">
+      <view class="sil-head"></view>
+      <view class="sil-body"></view>
+    </view>
+    <view wx:if="{{tilted}}" class="tilt-warn">手机倾斜，请摆正</view>
+    <view class="step-chip">{{step}} / 2</view>
+    <text class="guide-hint">拍摄时请让人物对准上面的轮廓</text>
+  </view>
+
+  <view class="shoot-tips">
+    <text>· 距离镜头约 0.8–1 米，露出头部和肩部</text>
+    <text>· 手臂自然下垂，别耸肩、别歪头</text>
+    <text>· 光线充足、背景简洁、画面里只有你一个人</text>
+  </view>
+
+  <view class="shoot-actions">
+    <button class="shoot-btn" bindtap="takePhoto">拍照</button>
+    <button class="album-btn" bindtap="chooseAlbum">相册</button>
+    <button wx:if="{{step === 2}}" class="back-btn" bindtap="prev">重拍正面</button>
+  </view>
+</view>
