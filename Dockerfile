@@ -5,7 +5,7 @@ WORKDIR /app
 
 # opencv / mediapipe 运行所需的系统库
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 libgomp1 \
+    libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 libgomp1 libegl1 libgles2 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY ai-service/requirements.txt .
