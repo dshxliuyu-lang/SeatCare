@@ -41,7 +41,7 @@ Page({
     wx.chooseMedia({
       count: 1,
       mediaType: ['image'],
-      sourceType: ['camera'],
+      sourceType: ['camera', 'album'],
       camera: 'back',
       success: ({ tempFiles }) => {
         const p = tempFiles[0] && tempFiles[0].tempFilePath
