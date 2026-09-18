@@ -16,3 +16,12 @@
 .shoot-btn::after,.album-btn::after,.back-btn::after{border:0}
 .album-btn{flex:1;height:88rpx;line-height:88rpx;margin:0;color:#fff;background:rgba(255,255,255,.14);border-radius:999rpx;font-size:26rpx}
 .back-btn{flex:0 0 auto;height:88rpx;line-height:88rpx;margin:0;padding:0 20rpx;color:rgba(255,255,255,.7);background:transparent;font-size:24rpx}
+.privacy-mask{position:fixed;top:0;left:0;right:0;bottom:0;z-index:99;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6)}
+.privacy-dialog{width:600rpx;padding:40rpx;background:#fff;border-radius:20rpx;box-sizing:border-box}
+.privacy-title{display:block;font-size:32rpx;font-weight:800;color:#17231e;margin-bottom:20rpx}
+.privacy-text{display:block;font-size:26rpx;line-height:1.6;color:#536259;margin-bottom:30rpx}
+.privacy-btns{display:flex;gap:20rpx}
+.privacy-refuse,.privacy-agree{flex:1;height:80rpx;line-height:80rpx;margin:0;border-radius:14rpx;font-size:28rpx}
+.privacy-refuse::after,.privacy-agree::after{border:0}
+.privacy-refuse{color:#617068;background:#eef4f1}
+.privacy-agree{color:#fff;background:#176b4d;font-weight:700}

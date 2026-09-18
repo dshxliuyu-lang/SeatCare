@@ -25,4 +25,15 @@
     <button class="album-btn" bindtap="chooseAlbum">相册</button>
     <button wx:if="{{step === 2}}" class="back-btn" bindtap="prev">重拍正面</button>
   </view>
+
+  <view wx:if="{{showPrivacy}}" class="privacy-mask">
+    <view class="privacy-dialog">
+      <text class="privacy-title">隐私保护提示</text>
+      <text class="privacy-text">为进行坐姿体态检测，需要获取你的摄像头和相册权限。照片仅用于本次分析，可在「历史记录」中随时删除，不用于其他用途。</text>
+      <view class="privacy-btns">
+        <button class="privacy-refuse" bindtap="onRefusePrivacy">不同意</button>
+        <button class="privacy-agree" open-type="agreePrivacyAuthorization" bindagreeprivacyauthorization="onAgreePrivacy">同意并继续</button>
+      </view>
+    </view>
+  </view>
 </view>
