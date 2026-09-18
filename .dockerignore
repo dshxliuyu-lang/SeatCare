@@ -1,0 +1,8 @@
+.git
+.gitignore
+ai-service/.venv
+ai-service/__pycache__
+ai-service/posture.db
+spine-test
+README.md
+LICENSE
