@@ -464,6 +464,9 @@ class DB:
                 database=os.environ.get("DB_NAME", "spine_ai"),
                 charset="utf8mb4",
                 cursorclass=pymysql.cursors.DictCursor,
+                connect_timeout=15,
+                read_timeout=15,
+                write_timeout=15,
             )
         else:
             self.conn = sqlite3.connect(DB_PATH)
@@ -525,7 +528,11 @@ def init_db():
     seed_tips()
 
 
-init_db()
+try:
+    init_db()
+except Exception as exc:  # noqa: BLE001
+    # 数据库连不上时不让整个应用崩溃，/health 等接口仍可用，便于排查
+    print(f"[WARN] 数据库初始化失败，应用仍会启动（登录/历史等依赖数据库的功能暂不可用）: {type(exc).__name__}: {exc}")
 
 
 def resolve_openid(code, device_id):
@@ -575,6 +582,17 @@ def set_member(openid):
 @app.get("/health")
 def health():
     return jsonify(ok=True)
+
+
+@app.get("/debug/db")
+def debug_db():
+    """探测数据库连接，返回具体错误，便于云端排查。"""
+    try:
+        with get_db() as db:
+            db.execute("SELECT 1").fetchone()
+        return jsonify(ok=True, message="数据库连接正常")
+    except Exception as exc:  # noqa: BLE001
+        return jsonify(ok=False, error=f"{type(exc).__name__}: {exc}"), 500
 
 
 @app.get("/tips")
